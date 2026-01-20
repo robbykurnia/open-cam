@@ -2,82 +2,43 @@
 
 import { useRef, useState } from "react";
 
-export default function CameraPage() {
-  const videoRef = useRef<HTMLVideoElement | null>(null);
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [photo, setPhoto] = useState<string | null>(null);
-  const [stream, setStream] = useState<MediaStream | null>(null);
-  console.log('debug photo', photo)
-  console.log('debug stream', stream)
+export default function CameraNativePage() {
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
 
-  const openCamera = async () => {
-    const mediaStream = await navigator.mediaDevices.getUserMedia({
-      video: {
-        facingMode: "user", // "user" = selfie, "environment" = belakang
-      },
-    });
+  const handlePhoto = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
 
-    setStream(mediaStream);
-
-    if (videoRef.current) {
-      videoRef.current.srcObject = mediaStream;
-    }
-  };
-
-  const takePhoto = () => {
-    if (!videoRef.current || !canvasRef.current) return;
-
-    const video = videoRef.current;
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-
-    ctx?.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-    const imageData = canvas.toDataURL("image/jpeg", 0.9);
-    setPhoto(imageData);
-  };
-
-  const stopCamera = () => {
-    stream?.getTracks().forEach((track) => track.stop());
-    setStream(null);
+    // Buat URL sementara untuk preview
+    const url = URL.createObjectURL(file);
+    setPreview(url);
   };
 
   return (
     <div style={{ padding: 20 }}>
-      <h2>Ambil Foto (Next.js)</h2>
+      <h2>Ambil Foto (Native Camera)</h2>
 
-      {!stream && (
-        <button onClick={openCamera}>Buka Kamera</button>
-      )}
+      <input
+        ref={inputRef}
+        type="file"
+        accept="image/*"
+        capture="environment"   // kamera belakang
+        onChange={handlePhoto}
+        style={{ display: "none" }}
+      />
 
-      {stream && (
-        <>
-          <video
-            ref={videoRef}
-            autoPlay
-            playsInline
+      <button onClick={() => inputRef.current?.click()}>
+        📷 Buka Kamera HP
+      </button>
+
+      {preview && (
+        <div style={{ marginTop: 20 }}>
+          <h3>Preview Hasil Foto:</h3>
+          <img
+            src={preview}
             style={{ width: 300, border: "1px solid #ccc" }}
           />
-
-          <div style={{ marginTop: 10 }}>
-            <button onClick={takePhoto}>📸 Ambil Foto</button>
-            <button onClick={stopCamera} style={{ marginLeft: 10 }}>
-              Tutup Kamera
-            </button>
-          </div>
-        </>
-      )}
-
-      {/* Canvas tersembunyi untuk capture */}
-      <canvas ref={canvasRef} style={{ display: "none" }} />
-
-      {photo && (
-        <div style={{ marginTop: 20 }}>
-          <h3>Hasil Foto:</h3>
-          <img src={photo} style={{ width: 300 }} />
         </div>
       )}
     </div>
