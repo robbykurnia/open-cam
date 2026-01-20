@@ -111,7 +111,6 @@ export default function KycSelfieModal({
             <Webcam
               ref={webcamRef}
               audio={false}
-              mirrored
               screenshotFormat="image/jpeg"
               videoConstraints={{
                 facingMode: "environment",
