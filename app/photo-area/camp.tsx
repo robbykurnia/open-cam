@@ -114,7 +114,7 @@ export default function KycSelfieModal({
               mirrored
               screenshotFormat="image/jpeg"
               videoConstraints={{
-                facingMode: "user",
+                facingMode: "environment",
                 width: { ideal: 1920 },
                 height: { ideal: 1080 },
               }}
