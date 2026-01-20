@@ -29,7 +29,7 @@ export default function CameraNativePage() {
       />
 
       <button onClick={() => inputRef.current?.click()}>
-        📷 Buka Kamera HP
+        📷 Buka Kamera HP preview: {preview}
       </button>
 
       {preview && (
