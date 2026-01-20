@@ -9,12 +9,6 @@ interface KycSelfieModalProps {
   onSuccess: (file: File, base64: string) => void;
 }
 
-const FRAME = {
-  top: "15%",      // harus sama dengan gradient atas
-  bottom: "30%",   // harus sama dengan gradient bawah
-  side: "30%",     // harus sama dengan gradient kiri-kanan
-  radius: "16px",
-};
 
 export default function KycSelfieModal({
   open,
