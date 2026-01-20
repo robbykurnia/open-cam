@@ -5,7 +5,8 @@ import KycSelfieModal from "./camp";
 
 export default function KycPage() {
   const [open, setOpen] = useState(false);
-  const [selfie, setSelfie] = useState<File | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_selfie, setSelfie] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
 
   const handleSuccess = (file: File, base64: string) => {
